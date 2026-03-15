@@ -1,6 +1,7 @@
 import { LogInIcon, SearchIcon } from "lucide-react"
 import { twMerge } from "tailwind-merge"
 import { Input } from "@/components/input"
+import { focusRingClass } from "@/components/styles"
 
 export function Header() {
   return (
@@ -28,7 +29,7 @@ export function Header() {
           className={twMerge(
             "size-8 cursor-pointer rounded-full bg-navy-700 border border-navy-500 flex items-center justify-center",
             "hover:bg-navy-600 transition-colors duration-150",
-            "outline-none focus-visible:ring-2 focus-visible:ring-navy-400 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-800",
+            focusRingClass,
           )}
         >
           <LogInIcon className="size-3.5 text-navy-200" />
