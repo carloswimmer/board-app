@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@plugin "tailwind-scrollbar";
+
 @theme {
   --color-navy-950: #16161d;
   --color-navy-900: #171821;
