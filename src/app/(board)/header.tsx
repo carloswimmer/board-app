@@ -1,11 +1,10 @@
 "use client"
 
-import { LogInIcon, SearchIcon } from "lucide-react"
+import { SearchIcon } from "lucide-react"
 import { debounce, parseAsString, useQueryState } from "nuqs"
 import type { ChangeEvent } from "react"
-import { twMerge } from "tailwind-merge"
 import { Input } from "@/components/input"
-import { focusRingClass } from "@/components/styles"
+import { AuthenticationButton } from "./authenticationButton"
 
 export function Header() {
   const [search, setSearch] = useQueryState("q", parseAsString.withDefault(""))
@@ -38,16 +37,7 @@ export function Header() {
           />
         </div>
 
-        <button
-          type="button"
-          className={twMerge(
-            "size-8 cursor-pointer rounded-full bg-navy-700 border border-navy-500 flex items-center justify-center",
-            "hover:bg-navy-600 transition-colors duration-150",
-            focusRingClass,
-          )}
-        >
-          <LogInIcon className="size-3.5 text-navy-200" />
-        </button>
+        <AuthenticationButton />
       </div>
     </div>
   )
