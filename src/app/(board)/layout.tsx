@@ -1,4 +1,9 @@
+import type { Metadata } from "next"
 import { Header } from "./header"
+
+export const metadata: Metadata = {
+  title: "Board",
+}
 
 export default function BoardLayout({
   children,
