@@ -3,7 +3,18 @@ import { Button } from "@/components/button"
 import { Card } from "@/components/card"
 import { Section } from "@/components/section"
 
-export default function Home() {
+interface SearchParams {
+  q?: string
+}
+
+interface BoardProps {
+  searchParams: Promise<SearchParams>
+}
+
+export default async function Board({ searchParams }: BoardProps) {
+  const { q } = await searchParams
+  console.log({ q })
+
   return (
     <main className="grid grid-cols-4 gap-5 flex-1 items-stretch">
       <Section.Root>

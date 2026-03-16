@@ -1,9 +1,21 @@
+"use client"
+
 import { LogInIcon, SearchIcon } from "lucide-react"
+import { debounce, parseAsString, useQueryState } from "nuqs"
+import type { ChangeEvent } from "react"
 import { twMerge } from "tailwind-merge"
 import { Input } from "@/components/input"
 import { focusRingClass } from "@/components/styles"
 
 export function Header() {
+  const [search, setSearch] = useQueryState("q", parseAsString.withDefault(""))
+
+  function handleSearchUpdate(event: ChangeEvent<HTMLInputElement>) {
+    setSearch(event.target.value, {
+      limitUrlUpdates: event.target.value !== "" ? debounce(500) : undefined,
+    })
+  }
+
   return (
     <div className="max-w-[900px] mx-auto w-full flex items-center justify-between">
       <div className="space-y-1">
@@ -21,6 +33,8 @@ export function Header() {
             type="text"
             placeholder="Search for features..."
             className="w-[270px ] pl-8"
+            value={search}
+            onChange={handleSearchUpdate}
           />
         </div>
 
