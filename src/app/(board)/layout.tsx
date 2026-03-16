@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Header } from "./header"
+import { Header } from "./header/header"
 
 export const metadata: Metadata = {
   title: "Board",

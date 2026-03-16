@@ -1,3 +1,5 @@
+"use client"
+
 import { Loader2Icon, LogInIcon } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
@@ -5,7 +7,7 @@ import { twMerge } from "tailwind-merge"
 import { focusRingClass } from "@/components/styles"
 import { authClient } from "@/lib/auth-client"
 
-export function AuthenticationButton() {
+export function UserButton() {
   const [isSigning, setIsSigning] = useState(false)
   const { data, isPending } = authClient.useSession()
   const { user } = data || {}
