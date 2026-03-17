@@ -14,7 +14,12 @@ interface BoardProps {
 
 export default async function Board({ searchParams }: BoardProps) {
   const { q } = await searchParams
-  const { backlog, todo, in_progress: inProgress, done } = await listIssues()
+  const {
+    backlog,
+    todo,
+    in_progress: inProgress,
+    done,
+  } = await listIssues({ search: q })
 
   return (
     <main className="grid grid-cols-4 gap-5 flex-1 items-stretch">

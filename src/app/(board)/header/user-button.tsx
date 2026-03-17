@@ -1,7 +1,6 @@
 "use client"
 
 import { Loader2Icon, LogInIcon } from "lucide-react"
-import Image from "next/image"
 import { useState } from "react"
 import { twMerge } from "tailwind-merge"
 import { focusRingClass } from "@/components/styles"
@@ -44,13 +43,8 @@ export function UserButton() {
       )}
     >
       {user ? (
-        <Image
-          src={user.image ?? ""}
-          alt={user.name}
-          width={32}
-          height={32}
-          className="size-8 object-cover"
-        />
+        /** biome-ignore lint/performance/noImgElement: Github already optimizes the image */
+        <img src={user.image ?? ""} alt={user.name} className="size-8" />
       ) : (
         <LogInIcon className="size-3.5 text-navy-200" />
       )}

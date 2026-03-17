@@ -6,7 +6,10 @@ import type { ChangeEvent } from "react"
 import { Input } from "@/components/input"
 
 export function SearchInput() {
-  const [search, setSearch] = useQueryState("q", parseAsString.withDefault(""))
+  const [search, setSearch] = useQueryState(
+    "q",
+    parseAsString.withDefault("").withOptions({ shallow: false }),
+  )
 
   function handleSearchUpdate(event: ChangeEvent<HTMLInputElement>) {
     setSearch(event.target.value, {

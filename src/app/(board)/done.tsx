@@ -22,24 +22,32 @@ export function Done({ issues }: DoneProps) {
       </Section.Header>
 
       <Section.Content>
-        {issues.map((issue) => (
-          <Card.Root key={issue.id}>
-            <Card.Header>
-              <Card.Number>ISS-{issue.issueNumber}</Card.Number>
-              <Card.Title>{issue.title}</Card.Title>
-            </Card.Header>
-            <Card.Footer>
-              <Button>
-                <ThumbsUpIcon className="size-3" />
-                <span className="text-sm">12</span>
-              </Button>
-              <Button>
-                <MessageCircleIcon className="size-3" />
-                <span className="text-sm">6</span>
-              </Button>
-            </Card.Footer>
-          </Card.Root>
-        ))}
+        {issues.length === 0 ? (
+          <div className="flex items-center justify-center h-full py-8 mb-12 text-center">
+            <p className="text-sm text-navy-300">
+              No issues found for this section
+            </p>
+          </div>
+        ) : (
+          issues.map((issue) => (
+            <Card.Root key={issue.id}>
+              <Card.Header>
+                <Card.Number>ISS-{issue.issueNumber}</Card.Number>
+                <Card.Title>{issue.title}</Card.Title>
+              </Card.Header>
+              <Card.Footer>
+                <Button>
+                  <ThumbsUpIcon className="size-3" />
+                  <span className="text-sm">12</span>
+                </Button>
+                <Button>
+                  <MessageCircleIcon className="size-3" />
+                  <span className="text-sm">6</span>
+                </Button>
+              </Card.Footer>
+            </Card.Root>
+          ))
+        )}
       </Section.Content>
     </Section.Root>
   )
