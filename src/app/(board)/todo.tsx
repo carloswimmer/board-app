@@ -30,7 +30,7 @@ export function Todo({ issues }: TodoProps) {
           </div>
         ) : (
           issues.map((issue) => (
-            <Card.Root key={issue.id}>
+            <Card.Root href={`/issues/${issue.id}`} key={issue.id}>
               <Card.Header>
                 <Card.Number>ISS-{issue.issueNumber}</Card.Number>
                 <Card.Title>{issue.title}</Card.Title>
