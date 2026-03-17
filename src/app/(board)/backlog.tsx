@@ -11,7 +11,7 @@ interface BacklogProps {
 
 export function Backlog({ issues }: BacklogProps) {
   return (
-    <Section.Root>
+    <Section.Root className="bg-backlog/5">
       <Section.Header>
         <Section.Title>
           <ArchiveIcon className="size-3" />

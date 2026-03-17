@@ -11,7 +11,7 @@ interface DoneProps {
 
 export function Done({ issues }: DoneProps) {
   return (
-    <Section.Root>
+    <Section.Root className="bg-done/5">
       <Section.Header>
         <Section.Title>
           <ArchiveIcon className="size-3" />

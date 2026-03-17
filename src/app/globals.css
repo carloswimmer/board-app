@@ -14,4 +14,8 @@
   --color-navy-200: #9397aa;
   --color-navy-100: #c4c7d5;
   --color-navy-50: #ecedf2;
+  --color-backlog: #e38a0d;
+  --color-todo: #b510e8;
+  --color-inprogress: #0e88e5;
+  --color-done: #4b07aa;
 }

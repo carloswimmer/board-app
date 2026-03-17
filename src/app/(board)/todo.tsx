@@ -11,7 +11,7 @@ interface TodoProps {
 
 export function Todo({ issues }: TodoProps) {
   return (
-    <Section.Root>
+    <Section.Root className="bg-todo/5">
       <Section.Header>
         <Section.Title>
           <ArchiveIcon className="size-3" />

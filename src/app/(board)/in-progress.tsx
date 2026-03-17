@@ -11,7 +11,7 @@ interface InProgressProps {
 
 export function InProgress({ issues }: InProgressProps) {
   return (
-    <Section.Root>
+    <Section.Root className="bg-inprogress/5">
       <Section.Header>
         <Section.Title>
           <ArchiveIcon className="size-3" />
