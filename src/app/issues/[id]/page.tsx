@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/button"
 import { getIssue } from "@/http/get-issue"
+import { IssueCommentList } from "./issue-comments/issue-comment-list"
 
 interface Params {
   id: string
@@ -30,7 +31,7 @@ const statusLabels = {
 
 export default async function Issue({ params }: IssueProps) {
   const { id } = await params
-  const issue = await getIssue({ id })
+  const issue = await getIssue({ id }) // deduplication avoids this second call
 
   return (
     <main className="max-w-[900px] mx-auto w-full flex flex-col gap-4 p-6 bg-navy-800 border-[0.5px] border-navy-500 rounded-xl">
@@ -59,6 +60,16 @@ export default async function Issue({ params }: IssueProps) {
         <p className="text-navy-100 text-sm leading-relaxed">
           {issue.description}
         </p>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <span className="font-semibold">Comments</span>
+
+        <form action=""></form>
+
+        <div className="mt-3">
+          <IssueCommentList issueId={issue.id} />
+        </div>
       </div>
     </main>
   )
