@@ -2,11 +2,11 @@ import { formatDistanceToNow } from "date-fns"
 import { Comment } from "@/components/comment"
 import { listIssueComments } from "@/http/list-issue-comments"
 
-interface IssueCommentListProps {
+interface IssueCommentsListProps {
   issueId: string
 }
 
-export async function IssueCommentList({ issueId }: IssueCommentListProps) {
+export async function IssueCommentsList({ issueId }: IssueCommentsListProps) {
   const { comments } = await listIssueComments({ issueId })
 
   if (comments.length === 0) {

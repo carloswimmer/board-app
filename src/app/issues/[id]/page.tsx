@@ -1,9 +1,11 @@
 import { ArchiveIcon, ChevronLeftIcon, ThumbsUpIcon } from "lucide-react"
 import type { Metadata } from "next"
 import Link from "next/link"
+import { Suspense } from "react"
 import { Button } from "@/components/button"
 import { getIssue } from "@/http/get-issue"
-import { IssueCommentList } from "./issue-comments/issue-comment-list"
+import { IssueCommentsList } from "./issue-comments/issue-comments-list"
+import { IssueCommentsSkeleton } from "./issue-comments/issue-comments-skeleton"
 
 interface Params {
   id: string
@@ -68,7 +70,9 @@ export default async function Issue({ params }: IssueProps) {
         <form action=""></form>
 
         <div className="mt-3">
-          <IssueCommentList issueId={issue.id} />
+          <Suspense fallback={<IssueCommentsSkeleton />}>
+            <IssueCommentsList issueId={issue.id} />
+          </Suspense>
         </div>
       </div>
     </main>
