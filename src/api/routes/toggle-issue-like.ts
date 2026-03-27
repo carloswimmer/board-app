@@ -1,27 +1,22 @@
-import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi";
-import { and, eq, sql } from "drizzle-orm";
-import type { AuthSession } from "../auth";
-import { db } from "../db";
-import { issueLikes, issues } from "../db/schema";
-import { requireAuth } from "../middlewares/auth";
-
-const LikeResponseSchema = z.object({
-  id: z.uuidv4(),
-  likes: z.number().int(),
-  liked: z.boolean(),
-});
+import { createRoute, OpenAPIHono, z } from "@hono/zod-openapi"
+import { and, eq, sql } from "drizzle-orm"
+import type { AuthSession } from "../auth"
+import { db } from "../db"
+import { issueLikes, issues } from "../db/schema"
+import { requireAuth } from "../middlewares/auth"
+import { LikeResponseSchema } from "./schemas/issue-likes"
 
 const ErrorSchema = z.object({
   error: z.string(),
   message: z.string(),
-});
+})
 
 const ParamsSchema = z.object({
   id: z.uuidv4().openapi({
     param: { name: "id", in: "path" },
     example: "550e8400-e29b-41d4-a716-446655440000",
   }),
-});
+})
 
 const route = createRoute({
   method: "post",
@@ -55,23 +50,23 @@ const route = createRoute({
       description: "Issue not found",
     },
   },
-});
+})
 
 const app = new OpenAPIHono<{
   Variables: {
-    user: AuthSession["user"] | null;
-    session: AuthSession["session"] | null;
-  };
-}>();
+    user: AuthSession["user"] | null
+    session: AuthSession["session"] | null
+  }
+}>()
 
-app.use(requireAuth);
+app.use(requireAuth)
 
 export const toggleIssueLike = app.openapi(route, async (c) => {
-  const { id } = c.req.valid("param");
-  const user = c.get("user");
+  const { id } = c.req.valid("param")
+  const user = c.get("user")
 
   // Check if issue exists
-  const [issue] = await db.select().from(issues).where(eq(issues.id, id));
+  const [issue] = await db.select().from(issues).where(eq(issues.id, id))
 
   if (!issue) {
     return c.json(
@@ -80,49 +75,46 @@ export const toggleIssueLike = app.openapi(route, async (c) => {
         message: `Issue with id ${id} does not exist`,
       },
       404,
-    );
+    )
   }
 
   // Check if user already liked this issue
   const [existingLike] = await db
     .select()
     .from(issueLikes)
-    .where(and(eq(issueLikes.issueId, id), eq(issueLikes.userId, user!.id)));
+    .where(and(eq(issueLikes.issueId, id), eq(issueLikes.userId, user!.id)))
 
-  let liked = false;
+  let liked = false
 
   if (existingLike) {
     // Unlike: remove the like
     await db
       .delete(issueLikes)
-      .where(and(eq(issueLikes.issueId, id), eq(issueLikes.userId, user!.id)));
+      .where(and(eq(issueLikes.issueId, id), eq(issueLikes.userId, user!.id)))
 
     await db
       .update(issues)
       .set({ likes: sql`${issues.likes} - 1` })
-      .where(eq(issues.id, id));
+      .where(eq(issues.id, id))
 
-    liked = false;
+    liked = false
   } else {
     // Like: add the like
     await db.insert(issueLikes).values({
       issueId: id,
       userId: user!.id,
-    });
+    })
 
     await db
       .update(issues)
       .set({ likes: sql`${issues.likes} + 1` })
-      .where(eq(issues.id, id));
+      .where(eq(issues.id, id))
 
-    liked = true;
+    liked = true
   }
 
   // Get updated issue
-  const [updatedIssue] = await db
-    .select()
-    .from(issues)
-    .where(eq(issues.id, id));
+  const [updatedIssue] = await db.select().from(issues).where(eq(issues.id, id))
 
   return c.json(
     {
@@ -131,5 +123,5 @@ export const toggleIssueLike = app.openapi(route, async (c) => {
       liked,
     },
     200,
-  );
-});
+  )
+})
