@@ -21,6 +21,18 @@ This is a **public** repository — clone it, run it locally, and use it as a re
 
 ---
 
+## Screenshots
+
+**Board** — Kanban columns, search, and issue cards with likes and comment counts.
+
+![Board view showing backlog, to-do, in progress, and done columns](assets/board-layout.jpg)
+
+**Issue detail** — Status, likes, description, and comments thread.
+
+![Issue detail page with comments section](assets/comments-layout.jpg)
+
+---
+
 ## Features
 
 | Area | What you get |
