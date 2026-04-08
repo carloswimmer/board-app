@@ -17,6 +17,7 @@
   "dependencies": {
     "@faker-js/faker": "10.0.0",
     "@hono/zod-openapi": "1.1.3",
+    "@hookform/resolvers": "^5.2.2",
     "@scalar/hono-api-reference": "0.9.19",
     "@tanstack/react-query": "^5.95.2",
     "better-auth": "1.3.24",
@@ -30,6 +31,8 @@
     "postgres": "3.4.7",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-hook-form": "^7.72.1",
+    "server-only": "^0.0.1",
     "tailwind-merge": "^3.5.0",
     "tailwind-scrollbar": "^4.0.2",
     "tsx": "^4.21.0",
