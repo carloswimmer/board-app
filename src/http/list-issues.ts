@@ -3,10 +3,19 @@ import { clientEnv } from "@/client-env"
 
 interface ListIssuesParams {
   search?: string
+  sort?: "issueNumber"
+  direction?: "asc" | "desc"
 }
 
-export async function listIssues({ search }: ListIssuesParams = {}) {
+export async function listIssues({
+  search,
+  sort = "issueNumber",
+  direction = "asc",
+}: ListIssuesParams = {}) {
   const url = new URL("/api/issues", clientEnv.NEXT_PUBLIC_API_URL)
+
+  url.searchParams.set("sort", sort)
+  url.searchParams.set("direction", direction)
 
   if (search) {
     url.searchParams.set("search", search)
