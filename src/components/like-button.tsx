@@ -21,47 +21,65 @@ export function LikeButton({
   ...props
 }: LikeButtonProps) {
   const queryClient = useQueryClient()
-  const queryKey = ["issue-likes", issueId]
+  const queryKey = ["issue-likes"]
   const liked = initialLiked
 
   const { mutate: onToggleLike, isPending } = useMutation({
     mutationFn: () => toggleLike({ issueId }),
     onMutate: async () => {
-      const previousData =
-        queryClient.getQueryData<IssueInteractionResponse>(queryKey)
+      const previousData = queryClient.getQueriesData<IssueInteractionResponse>(
+        { queryKey },
+      )
 
-      queryClient.setQueryData<IssueInteractionResponse>(queryKey, (old) => {
-        if (!old) return undefined
+      queryClient.setQueriesData<IssueInteractionResponse>(
+        { queryKey },
+        (old) => {
+          if (!old) return undefined
 
-        return {
-          ...old,
-          interactions: old.interactions.map((interaction) => {
-            if (interaction.issueId !== issueId) return interaction
+          const has = old.interactions.some((item) => item.issueId === issueId)
 
-            const nextLiked = !interaction.isLiked
-            return {
-              ...interaction,
-              isLiked: nextLiked,
-              likesCount: nextLiked
-                ? interaction.likesCount + 1
-                : interaction.likesCount - 1,
-            }
-          }),
-        }
-      })
+          if (!has) return old
+
+          return {
+            ...old,
+            interactions: old.interactions.map((interaction) => {
+              if (interaction.issueId !== issueId) return interaction
+
+              const nextLiked = !interaction.isLiked
+              return {
+                ...interaction,
+                isLiked: nextLiked,
+                likesCount: nextLiked
+                  ? interaction.likesCount + 1
+                  : interaction.likesCount - 1,
+              }
+            }),
+          }
+        },
+      )
 
       return { previousData }
     },
     onError: async (_err, _params, context) => {
       if (context?.previousData) {
-        queryClient.setQueryData<IssueInteractionResponse>(
-          queryKey,
-          context.previousData,
-        )
+        for (const [queryKey, data] of context.previousData)
+          queryClient.setQueryData<IssueInteractionResponse>(queryKey, data)
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey })
+      queryClient.invalidateQueries({
+        predicate(query) {
+          const key = query.queryKey
+          if (key[0] !== "issue-likes") return false
+
+          const second = key[1]
+          if (typeof second !== "string") return false
+
+          if (second === issueId) return true
+
+          return second.split(",").filter(Boolean).includes(issueId)
+        },
+      })
     },
   })
 
