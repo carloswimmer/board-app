@@ -1,5 +1,7 @@
 # Board App
 
+![Board view showing backlog, to-do, in progress, and done columns](docs/images/app-layout.jpg)
+
 <p align="center">
   <strong>Kanban-style board for tracking issues — backlog, to-do, in progress, and done.</strong>
 </p>
@@ -18,15 +20,6 @@ A web app focused on **clarity and productivity**: see work flow in columns, ope
 This is a **public** repository — clone it, run it locally, and use it as a reference for your own projects.
 
 > **Architecture note:** the backend bundled with this repo is **temporary** and meant for development and learning. The plan is to replace it with a **Java Spring** API later — the frontend is structured so it can evolve in that direction without tying this README to internal implementation details.
-
----
-
-## Screenshots
-
-**Board** — Kanban columns, search, and issue cards with likes and comment counts.
-**Issue detail** — Status, likes, description, and comments thread.
-
-![Board view showing backlog, to-do, in progress, and done columns](docs/images/app-layout.jpg)
 
 ---
 
