@@ -1,6 +1,7 @@
 "use client"
 
 import { Loader2Icon, LogInIcon } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { twMerge } from "tailwind-merge"
 import { focusRingClass } from "@/components/styles"
@@ -10,6 +11,7 @@ export function UserButton() {
   const [isSigning, setIsSigning] = useState(false)
   const { data, isPending } = authClient.useSession()
   const { user } = data || {}
+  const router = useRouter()
 
   async function handleSignIn() {
     setIsSigning(true)
@@ -17,7 +19,13 @@ export function UserButton() {
   }
 
   async function handleSignOut() {
-    await authClient.signOut()
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/")
+        },
+      },
+    })
   }
 
   return isSigning || isPending ? (
