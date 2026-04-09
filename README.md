@@ -24,12 +24,9 @@ This is a **public** repository — clone it, run it locally, and use it as a re
 ## Screenshots
 
 **Board** — Kanban columns, search, and issue cards with likes and comment counts.
-
-![Board view showing backlog, to-do, in progress, and done columns](docs/images/board-layout.jpg)
-
 **Issue detail** — Status, likes, description, and comments thread.
 
-![Issue detail page with comments section](docs/images/comments-layout.jpg)
+![Board view showing backlog, to-do, in progress, and done columns](docs/images/app-layout.jpg)
 
 ---
 

@@ -14,7 +14,7 @@ interface IssueProps {
 export default async function Issue({ params }: IssueProps) {
   const { id } = await params
   return (
-    <Drawer>
+    <Drawer aria-describedby="Issue details">
       <div className="flex flex-col gap-4 p-6">
         <BackButton />
 

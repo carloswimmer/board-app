@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache"
 import { IssuesListResponseSchema } from "@/api/routes/list-issues"
 import { clientEnv } from "@/client-env"
 
@@ -12,6 +13,10 @@ export async function listIssues({
   sort = "issueNumber",
   direction = "asc",
 }: ListIssuesParams = {}) {
+  "use cache"
+
+  cacheLife("minutes")
+
   const url = new URL("/api/issues", clientEnv.NEXT_PUBLIC_API_URL)
 
   url.searchParams.set("sort", sort)

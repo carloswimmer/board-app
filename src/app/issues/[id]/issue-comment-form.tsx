@@ -24,6 +24,7 @@ export function IssueCommentForm({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<CreateCommentSchema>({
     resolver: zodResolver(createCommentSchema),
@@ -31,6 +32,7 @@ export function IssueCommentForm({
 
   async function handleCreateComment(data: CreateCommentSchema) {
     await onCreateComment(data.text)
+    reset()
   }
 
   return (
