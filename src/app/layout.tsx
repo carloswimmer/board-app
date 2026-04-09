@@ -18,14 +18,19 @@ const interFont = Inter({
 
 export default function RootLayout({
   children,
+  drawer,
 }: Readonly<{
   children: React.ReactNode
+  drawer: React.ReactNode
 }>) {
   return (
     <html lang="en" className={interFont.className}>
       <body className="bg-navy-950 text-navy-50 antialiased">
         <ReactQueryProvider>
-          <NuqsAdapter>{children}</NuqsAdapter>
+          <NuqsAdapter>
+            {drawer}
+            {children}
+          </NuqsAdapter>
         </ReactQueryProvider>
       </body>
     </html>
