@@ -20,6 +20,7 @@ export function Drawer({ children, className, ...props }: DialogProps) {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-black/60" />
         <Dialog.Content
+          aria-describedby={undefined}
           className={twMerge(
             "fixed right-0 top-0 z-50 h-full w-full max-w-[540px] bg-navy-950 overflow-y-auto border-l border-navy-700",
             className,
