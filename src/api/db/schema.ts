@@ -10,6 +10,11 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
+/** Drizzle `$onUpdate` target; exported for unit tests */
+export function schemaOnUpdateNow() {
+  return new Date();
+}
+
 export const issueNumberSeq = pgSequence("issue_number_seq", {
   startWith: 0,
   minValue: 0,
@@ -36,29 +41,22 @@ export const issues = pgTable("issues", {
   createdAt: timestamp().notNull().defaultNow(),
 });
 
+export function fkCommentsIssueId() {
+  return issues.id;
+}
+
 export const comments = pgTable("comments", {
   id: uuid().primaryKey().defaultRandom(),
   issueId: uuid()
     .notNull()
-    .references(() => issues.id, { onDelete: "cascade" }),
+    .references(fkCommentsIssueId, { onDelete: "cascade" }),
   authorName: text().notNull(),
   authorAvatar: text().notNull(),
   text: text().notNull(),
   createdAt: timestamp().notNull().defaultNow(),
 });
 
-export const issueLikes = pgTable("issue_likes", {
-  id: uuid().primaryKey().defaultRandom(),
-  issueId: uuid()
-    .notNull()
-    .references(() => issues.id, { onDelete: "cascade" }),
-  userId: uuid()
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  createdAt: timestamp().notNull().defaultNow(),
-});
-
-// Better Auth tables (plural names)
+// Better Auth tables (plural names) — before issueLikes so FKs resolve
 export const users = pgTable("users", {
   id: uuid().primaryKey().defaultRandom(),
   name: text().notNull(),
@@ -68,9 +66,13 @@ export const users = pgTable("users", {
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp()
     .defaultNow()
-    .$onUpdate(() => new Date())
+    .$onUpdate(schemaOnUpdateNow)
     .notNull(),
 });
+
+export function fkSessionsUserId() {
+  return users.id;
+}
 
 export const sessions = pgTable("sessions", {
   id: uuid().primaryKey().defaultRandom(),
@@ -78,14 +80,18 @@ export const sessions = pgTable("sessions", {
   token: text().notNull().unique(),
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp()
-    .$onUpdate(() => new Date())
+    .$onUpdate(schemaOnUpdateNow)
     .notNull(),
   ipAddress: text(),
   userAgent: text(),
   userId: uuid()
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(fkSessionsUserId, { onDelete: "cascade" }),
 });
+
+export function fkAccountsUserId() {
+  return users.id;
+}
 
 export const accounts = pgTable("accounts", {
   id: uuid().primaryKey().defaultRandom(),
@@ -93,7 +99,7 @@ export const accounts = pgTable("accounts", {
   providerId: text().notNull(),
   userId: uuid()
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
+    .references(fkAccountsUserId, { onDelete: "cascade" }),
   accessToken: text(),
   refreshToken: text(),
   idToken: text(),
@@ -103,8 +109,27 @@ export const accounts = pgTable("accounts", {
   password: text(),
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp()
-    .$onUpdate(() => new Date())
+    .$onUpdate(schemaOnUpdateNow)
     .notNull(),
+});
+
+export function fkIssueLikesIssueId() {
+  return issues.id;
+}
+
+export function fkIssueLikesUserId() {
+  return users.id;
+}
+
+export const issueLikes = pgTable("issue_likes", {
+  id: uuid().primaryKey().defaultRandom(),
+  issueId: uuid()
+    .notNull()
+    .references(fkIssueLikesIssueId, { onDelete: "cascade" }),
+  userId: uuid()
+    .notNull()
+    .references(fkIssueLikesUserId, { onDelete: "cascade" }),
+  createdAt: timestamp().notNull().defaultNow(),
 });
 
 export const verifications = pgTable("verifications", {
@@ -115,6 +140,6 @@ export const verifications = pgTable("verifications", {
   createdAt: timestamp().defaultNow().notNull(),
   updatedAt: timestamp()
     .defaultNow()
-    .$onUpdate(() => new Date())
+    .$onUpdate(schemaOnUpdateNow)
     .notNull(),
 });

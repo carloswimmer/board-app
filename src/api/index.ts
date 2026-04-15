@@ -1,6 +1,8 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
+import type { Context } from "hono";
 import { apiReference } from "@scalar/hono-api-reference";
 import { cors } from "hono/cors";
+import type { ZodError } from "zod";
 import { type AuthSession, auth } from "./auth";
 import { createComment } from "./routes/create-comment";
 import { createIssue } from "./routes/create-issue";
@@ -14,23 +16,28 @@ import { toggleIssueLike } from "./routes/toggle-issue-like";
 import { updateComment } from "./routes/update-comment";
 import { updateIssue } from "./routes/update-issue";
 
+export function openApiDefaultHook(
+  result: { success: boolean; error?: ZodError },
+  c: Context,
+) {
+  if (!result.success && result.error) {
+    return c.json(
+      {
+        error: "Validation failed",
+        message: result.error.issues.map((i) => i.message).join(", "),
+      },
+      400,
+    );
+  }
+}
+
 const app = new OpenAPIHono<{
   Variables: {
     user: AuthSession["user"] | null;
     session: AuthSession["session"] | null;
   };
 }>({
-  defaultHook: (result, c) => {
-    if (!result.success) {
-      return c.json(
-        {
-          error: "Validation failed",
-          message: result.error.issues.map((i) => i.message).join(", "),
-        },
-        400,
-      );
-    }
-  },
+  defaultHook: openApiDefaultHook,
 }).basePath("/api");
 
 // CORS middleware for auth routes
