@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { ZodError } from "zod"
 import { makeSelectFromRows } from "@/test/drizzle-mocks"
-import { ISSUE_ID_A, createdAt } from "@/test/fixtures"
+import { createdAt, ISSUE_ID_A } from "@/test/fixtures"
 
 const getSession = vi.fn().mockResolvedValue(null)
 const authHandler = vi.fn(async () => new Response("ok", { status: 200 }))

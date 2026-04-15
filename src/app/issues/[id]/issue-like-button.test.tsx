@@ -5,10 +5,9 @@ import { ISSUE_ID_A } from "@/test/fixtures"
 import { IssueLikeButton } from "./issue-like-button"
 
 vi.mock("@tanstack/react-query", async () => {
-  const actual =
-    await vi.importActual<typeof import("@tanstack/react-query")>(
-      "@tanstack/react-query",
-    )
+  const actual = await vi.importActual<typeof import("@tanstack/react-query")>(
+    "@tanstack/react-query",
+  )
   return {
     ...actual,
     useQuery: vi.fn(),

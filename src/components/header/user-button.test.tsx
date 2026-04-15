@@ -6,9 +6,7 @@ import { UserButton } from "./user-button"
 const mocks = vi.hoisted(() => ({
   signInSocial: vi.fn().mockResolvedValue(undefined),
   signOut: vi.fn(
-    async (opts?: {
-      fetchOptions?: { onSuccess?: () => void }
-    }) => {
+    async (opts?: { fetchOptions?: { onSuccess?: () => void } }) => {
       opts?.fetchOptions?.onSuccess?.()
     },
   ),

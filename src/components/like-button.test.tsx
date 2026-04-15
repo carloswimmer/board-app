@@ -12,7 +12,10 @@ describe("LikeButton", () => {
   it("calls mutate on click", async () => {
     const user = userEvent.setup()
     render(
-      <LikeButton issueId="550e8400-e29b-41d4-a716-446655440000" initialLikes={2} />,
+      <LikeButton
+        issueId="550e8400-e29b-41d4-a716-446655440000"
+        initialLikes={2}
+      />,
     )
     await user.click(screen.getByRole("button", { name: /like/i }))
     expect(mutate).toHaveBeenCalled()

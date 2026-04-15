@@ -5,6 +5,8 @@ import { Description } from "./description"
 describe("Description", () => {
   it("renders title and subtitle", () => {
     render(<Description />)
-    expect(screen.getByRole("heading", { name: "Product Roadmap" })).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { name: "Product Roadmap" }),
+    ).toBeInTheDocument()
   })
 })

@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import { ISSUE_ID_A, createdAt } from "@/test/fixtures"
+import { createdAt, ISSUE_ID_A } from "@/test/fixtures"
 
 const createComment = vi.fn().mockResolvedValue(undefined)
 const issueCommentFormProps: {

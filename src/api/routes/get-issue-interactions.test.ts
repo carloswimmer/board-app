@@ -32,7 +32,9 @@ function mount(vars: Vars) {
 describe("getIssueInteractions route", () => {
   it("returns empty when no ids after filter", async () => {
     const app = mount({ user: null, session: null })
-    const res = await app.request("http://localhost/issues/interactions?issueIds=")
+    const res = await app.request(
+      "http://localhost/issues/interactions?issueIds=",
+    )
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(body.interactions).toEqual([])
@@ -54,12 +56,8 @@ describe("getIssueInteractions route", () => {
 
   it("marks liked issues for authenticated user", async () => {
     vi.mocked(db.select)
-      .mockReturnValueOnce(
-        makeSelectFromRows([{ id: ISSUE_ID_A, likes: 2 }]),
-      )
-      .mockReturnValueOnce(
-        makeSelectFromRows([{ issueId: ISSUE_ID_A }]),
-      )
+      .mockReturnValueOnce(makeSelectFromRows([{ id: ISSUE_ID_A, likes: 2 }]))
+      .mockReturnValueOnce(makeSelectFromRows([{ issueId: ISSUE_ID_A }]))
 
     const app = mount({
       user: mockUser as AuthSession["user"],

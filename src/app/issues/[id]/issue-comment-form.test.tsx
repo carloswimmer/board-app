@@ -12,7 +12,9 @@ describe("IssueCommentForm", () => {
       />,
     )
 
-    expect(screen.getByPlaceholderText("Sign in to comment...")).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText("Sign in to comment..."),
+    ).toBeInTheDocument()
     expect(screen.getByRole("button", { name: /publish/i })).toBeDisabled()
   })
 

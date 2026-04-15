@@ -1,7 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { makeSelectFromRows } from "@/test/drizzle-mocks"
-import { ISSUE_ID_A, createdAt } from "@/test/fixtures"
+import { createdAt, ISSUE_ID_A } from "@/test/fixtures"
 import { listIssueComments } from "./list-issue-comments"
 
 vi.mock("../db", () => ({
@@ -40,7 +40,9 @@ describe("listIssueComments route", () => {
   it("returns 404 when issue missing", async () => {
     vi.mocked(db.select).mockReturnValue(makeSelectFromRows([]))
     const app = new OpenAPIHono().route("/", listIssueComments)
-    const res = await app.request(`http://localhost/issues/${ISSUE_ID_A}/comments`)
+    const res = await app.request(
+      `http://localhost/issues/${ISSUE_ID_A}/comments`,
+    )
     expect(res.status).toBe(404)
   })
 

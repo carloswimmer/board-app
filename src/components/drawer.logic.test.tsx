@@ -20,7 +20,9 @@ vi.mock("@radix-ui/react-dialog", () => ({
     return <div>{children}</div>
   },
   Portal: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-  Overlay: ({ className }: { className: string }) => <div className={className} />,
+  Overlay: ({ className }: { className: string }) => (
+    <div className={className} />
+  ),
   Content: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),

@@ -65,6 +65,16 @@ export const toggleIssueLike = app.openapi(route, async (c) => {
   const { id } = c.req.valid("param")
   const user = c.get("user")
 
+  if (!user) {
+    return c.json(
+      {
+        error: "Unauthorized",
+        message: "You must be logged in to toggle a like",
+      },
+      401,
+    )
+  }
+
   // Check if issue exists
   const [issue] = await db.select().from(issues).where(eq(issues.id, id))
 
@@ -82,7 +92,7 @@ export const toggleIssueLike = app.openapi(route, async (c) => {
   const [existingLike] = await db
     .select()
     .from(issueLikes)
-    .where(and(eq(issueLikes.issueId, id), eq(issueLikes.userId, user!.id)))
+    .where(and(eq(issueLikes.issueId, id), eq(issueLikes.userId, user.id)))
 
   let liked = false
 
@@ -90,7 +100,7 @@ export const toggleIssueLike = app.openapi(route, async (c) => {
     // Unlike: remove the like
     await db
       .delete(issueLikes)
-      .where(and(eq(issueLikes.issueId, id), eq(issueLikes.userId, user!.id)))
+      .where(and(eq(issueLikes.issueId, id), eq(issueLikes.userId, user.id)))
 
     await db
       .update(issues)
@@ -102,7 +112,7 @@ export const toggleIssueLike = app.openapi(route, async (c) => {
     // Like: add the like
     await db.insert(issueLikes).values({
       issueId: id,
-      userId: user!.id,
+      userId: user.id,
     })
 
     await db

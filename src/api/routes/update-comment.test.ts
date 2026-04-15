@@ -1,6 +1,12 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
 import { describe, expect, it, vi } from "vitest"
-import { COMMENT_ID_A, ISSUE_ID_A, createdAt, mockSession, mockUser } from "@/test/fixtures"
+import {
+  COMMENT_ID_A,
+  createdAt,
+  ISSUE_ID_A,
+  mockSession,
+  mockUser,
+} from "@/test/fixtures"
 import type { AuthSession } from "../auth"
 import { updateComment } from "./update-comment"
 
@@ -11,8 +17,8 @@ vi.mock("../db", () => ({
   },
 }))
 
-import { db } from "../db"
 import { makeSelectFromRows } from "@/test/drizzle-mocks"
+import { db } from "../db"
 
 type Vars = {
   user: AuthSession["user"] | null

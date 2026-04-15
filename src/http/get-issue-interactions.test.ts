@@ -17,9 +17,9 @@ describe("getIssueInteractions http", () => {
         },
       ],
     }
-    const fetchMock = vi.fn().mockResolvedValue(
-      new Response(JSON.stringify(payload)),
-    )
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response(JSON.stringify(payload)))
     vi.stubGlobal("fetch", fetchMock)
 
     const { getIssueInteractions } = await import("./get-issue-interactions")

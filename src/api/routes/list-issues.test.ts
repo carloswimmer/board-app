@@ -1,7 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { makeSelectFromRows } from "@/test/drizzle-mocks"
-import { ISSUE_ID_A, ISSUE_ID_B, createdAt } from "@/test/fixtures"
+import { createdAt, ISSUE_ID_A, ISSUE_ID_B } from "@/test/fixtures"
 import { listIssues } from "./list-issues"
 
 vi.mock("../db", () => ({

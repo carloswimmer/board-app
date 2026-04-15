@@ -13,7 +13,11 @@ const mutationRef = vi.hoisted(
       onMutate: undefined as undefined | (() => Promise<unknown>),
       onError: undefined as
         | undefined
-        | ((error: unknown, params: unknown, context: unknown) => Promise<void>),
+        | ((
+            error: unknown,
+            params: unknown,
+            context: unknown,
+          ) => Promise<void>),
       onSettled: undefined as undefined | (() => void),
     }) satisfies {
       onMutate: undefined | (() => Promise<unknown>)
@@ -28,7 +32,11 @@ vi.mock("@tanstack/react-query", () => ({
   useQueryClient: () => queryClient,
   useMutation: (options: {
     onMutate: () => Promise<unknown>
-    onError: (error: unknown, params: unknown, context: unknown) => Promise<void>
+    onError: (
+      error: unknown,
+      params: unknown,
+      context: unknown,
+    ) => Promise<void>
     onSettled: () => void
   }) => {
     mutationRef.onMutate = options.onMutate

@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import type { ReactNode } from "react"
 import { describe, expect, it, vi } from "vitest"
-import { ISSUE_ID_A, createdAt } from "@/test/fixtures"
+import { createdAt, ISSUE_ID_A } from "@/test/fixtures"
 
 const listIssueCommentsMock = vi.hoisted(() =>
   vi.fn().mockResolvedValue({
@@ -58,9 +58,7 @@ vi.mock("@/http/list-issue-comments", () => ({
 
 vi.mock("@/http/get-issue-interactions", () => ({
   getIssueInteractions: vi.fn().mockResolvedValue({
-    interactions: [
-      { issueId: ISSUE_ID_A, isLiked: true, likesCount: 3 },
-    ],
+    interactions: [{ issueId: ISSUE_ID_A, isLiked: true, likesCount: 3 }],
   }),
 }))
 
@@ -86,7 +84,9 @@ describe("app pages and layouts", () => {
   })
 
   it("renders board column skeleton", async () => {
-    const { BoardColumnSkeleton } = await import("./(board)/board-column-skeleton")
+    const { BoardColumnSkeleton } = await import(
+      "./(board)/board-column-skeleton"
+    )
     const { container } = render(<BoardColumnSkeleton title="Backlog" />)
     expect(container.textContent).toContain("Backlog")
   })
@@ -214,12 +214,12 @@ describe("app pages and layouts", () => {
   })
 
   it("renders issue comment form", async () => {
-    const { IssueCommentForm } = await import("./issues/[id]/issue-comment-form")
+    const { IssueCommentForm } = await import(
+      "./issues/[id]/issue-comment-form"
+    )
     const user = userEvent.setup()
     const onCreate = vi.fn().mockResolvedValue(undefined)
-    render(
-      <IssueCommentForm isAuthenticated onCreateComment={onCreate} />,
-    )
+    render(<IssueCommentForm isAuthenticated onCreateComment={onCreate} />)
     await user.type(screen.getByPlaceholderText(/Leave a comment/), "Hi")
     await user.click(screen.getByRole("button", { name: /publish/i }))
     await vi.waitFor(() => expect(onCreate).toHaveBeenCalledWith("Hi"))
@@ -229,9 +229,7 @@ describe("app pages and layouts", () => {
     vi.mocked(
       (await import("@/http/get-issue-interactions")).getIssueInteractions,
     ).mockResolvedValueOnce({
-      interactions: [
-        { issueId: ISSUE_ID_A, isLiked: true, likesCount: 2 },
-      ],
+      interactions: [{ issueId: ISSUE_ID_A, isLiked: true, likesCount: 2 }],
     })
     const { IssueLikeButton } = await import("./issues/[id]/issue-like-button")
     const qc = new QueryClient({
@@ -246,10 +244,11 @@ describe("app pages and layouts", () => {
       </W>,
     )
     await vi.waitFor(() =>
-      expect(screen.getByRole("button", { name: /unlike/i })).toBeInTheDocument(),
+      expect(
+        screen.getByRole("button", { name: /unlike/i }),
+      ).toBeInTheDocument(),
     )
   })
-
 })
 
 describe("api route bridge", () => {

@@ -1,20 +1,20 @@
-import { OpenAPIHono } from "@hono/zod-openapi";
-import type { Context } from "hono";
-import { apiReference } from "@scalar/hono-api-reference";
-import { cors } from "hono/cors";
-import type { ZodError } from "zod";
-import { type AuthSession, auth } from "./auth";
-import { createComment } from "./routes/create-comment";
-import { createIssue } from "./routes/create-issue";
-import { deleteComment } from "./routes/delete-comment";
-import { deleteIssue } from "./routes/delete-issue";
-import { getIssue } from "./routes/get-issue";
-import { getIssueInteractions } from "./routes/get-issue-interactions";
-import { listIssueComments } from "./routes/list-issue-comments";
-import { listIssues } from "./routes/list-issues";
-import { toggleIssueLike } from "./routes/toggle-issue-like";
-import { updateComment } from "./routes/update-comment";
-import { updateIssue } from "./routes/update-issue";
+import { OpenAPIHono } from "@hono/zod-openapi"
+import { apiReference } from "@scalar/hono-api-reference"
+import type { Context } from "hono"
+import { cors } from "hono/cors"
+import type { ZodError } from "zod"
+import { type AuthSession, auth } from "./auth"
+import { createComment } from "./routes/create-comment"
+import { createIssue } from "./routes/create-issue"
+import { deleteComment } from "./routes/delete-comment"
+import { deleteIssue } from "./routes/delete-issue"
+import { getIssue } from "./routes/get-issue"
+import { getIssueInteractions } from "./routes/get-issue-interactions"
+import { listIssueComments } from "./routes/list-issue-comments"
+import { listIssues } from "./routes/list-issues"
+import { toggleIssueLike } from "./routes/toggle-issue-like"
+import { updateComment } from "./routes/update-comment"
+import { updateIssue } from "./routes/update-issue"
 
 export function openApiDefaultHook(
   result: { success: boolean; error?: ZodError },
@@ -27,18 +27,18 @@ export function openApiDefaultHook(
         message: result.error.issues.map((i) => i.message).join(", "),
       },
       400,
-    );
+    )
   }
 }
 
 const app = new OpenAPIHono<{
   Variables: {
-    user: AuthSession["user"] | null;
-    session: AuthSession["session"] | null;
-  };
+    user: AuthSession["user"] | null
+    session: AuthSession["session"] | null
+  }
 }>({
   defaultHook: openApiDefaultHook,
-}).basePath("/api");
+}).basePath("/api")
 
 // CORS middleware for auth routes
 app.use(
@@ -49,12 +49,12 @@ app.use(
     allowMethods: ["POST", "GET", "OPTIONS"],
     credentials: true,
   }),
-);
+)
 
 // Better Auth handler
 app.on(["POST", "GET"], "/auth/*", (c) => {
-  return auth.handler(c.req.raw);
-});
+  return auth.handler(c.req.raw)
+})
 
 // OpenAPI documentation - register BEFORE session middleware to avoid auth check
 app.doc("/openapi.json", {
@@ -64,7 +64,7 @@ app.doc("/openapi.json", {
     title: "Kanban API",
     description: "REST API for the Kanban application",
   },
-});
+})
 
 // Scalar API reference UI - register BEFORE session middleware
 app.get(
@@ -74,36 +74,36 @@ app.get(
     theme: "purple",
     pageTitle: "Kanban API Documentation",
   }),
-);
+)
 
 // Session middleware for all routes (except docs and openapi.json)
 app.use("*", async (c, next) => {
-  const session = await auth.api.getSession({ headers: c.req.raw.headers });
+  const session = await auth.api.getSession({ headers: c.req.raw.headers })
 
   if (!session) {
-    c.set("user", null);
-    c.set("session", null);
+    c.set("user", null)
+    c.set("session", null)
   } else {
-    c.set("user", session.user);
-    c.set("session", session.session);
+    c.set("user", session.user)
+    c.set("session", session.session)
   }
 
-  return next();
-});
+  return next()
+})
 
 // Issue routes
-app.route("/", listIssues);
-app.route("/", getIssueInteractions); // Register specific route before parameterized routes
-app.route("/", getIssue);
-app.route("/", createIssue);
-app.route("/", updateIssue);
-app.route("/", deleteIssue);
-app.route("/", listIssueComments);
+app.route("/", listIssues)
+app.route("/", getIssueInteractions) // Register specific route before parameterized routes
+app.route("/", getIssue)
+app.route("/", createIssue)
+app.route("/", updateIssue)
+app.route("/", deleteIssue)
+app.route("/", listIssueComments)
 
 // Comment routes
-app.route("/", toggleIssueLike);
-app.route("/", createComment);
-app.route("/", updateComment);
-app.route("/", deleteComment);
+app.route("/", toggleIssueLike)
+app.route("/", createComment)
+app.route("/", updateComment)
+app.route("/", deleteComment)
 
-export default app;
+export default app

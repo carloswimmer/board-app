@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { sql } from "drizzle-orm"
 import {
   boolean,
   integer,
@@ -8,25 +8,25 @@ import {
   text,
   timestamp,
   uuid,
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/pg-core"
 
 /** Drizzle `$onUpdate` target; exported for unit tests */
 export function schemaOnUpdateNow() {
-  return new Date();
+  return new Date()
 }
 
 export const issueNumberSeq = pgSequence("issue_number_seq", {
   startWith: 0,
   minValue: 0,
   increment: 1,
-});
+})
 
 export const issueStatusEnum = pgEnum("issue_status", [
   "backlog",
   "todo",
   "in_progress",
   "done",
-]);
+])
 
 export const issues = pgTable("issues", {
   id: uuid().primaryKey().defaultRandom(),
@@ -39,10 +39,10 @@ export const issues = pgTable("issues", {
   status: issueStatusEnum().notNull().default("backlog"),
   likes: integer().notNull().default(0),
   createdAt: timestamp().notNull().defaultNow(),
-});
+})
 
 export function fkCommentsIssueId() {
-  return issues.id;
+  return issues.id
 }
 
 export const comments = pgTable("comments", {
@@ -54,7 +54,7 @@ export const comments = pgTable("comments", {
   authorAvatar: text().notNull(),
   text: text().notNull(),
   createdAt: timestamp().notNull().defaultNow(),
-});
+})
 
 // Better Auth tables (plural names) — before issueLikes so FKs resolve
 export const users = pgTable("users", {
@@ -64,14 +64,11 @@ export const users = pgTable("users", {
   emailVerified: boolean().default(false).notNull(),
   image: text(),
   createdAt: timestamp().defaultNow().notNull(),
-  updatedAt: timestamp()
-    .defaultNow()
-    .$onUpdate(schemaOnUpdateNow)
-    .notNull(),
-});
+  updatedAt: timestamp().defaultNow().$onUpdate(schemaOnUpdateNow).notNull(),
+})
 
 export function fkSessionsUserId() {
-  return users.id;
+  return users.id
 }
 
 export const sessions = pgTable("sessions", {
@@ -79,18 +76,16 @@ export const sessions = pgTable("sessions", {
   expiresAt: timestamp().notNull(),
   token: text().notNull().unique(),
   createdAt: timestamp().defaultNow().notNull(),
-  updatedAt: timestamp()
-    .$onUpdate(schemaOnUpdateNow)
-    .notNull(),
+  updatedAt: timestamp().$onUpdate(schemaOnUpdateNow).notNull(),
   ipAddress: text(),
   userAgent: text(),
   userId: uuid()
     .notNull()
     .references(fkSessionsUserId, { onDelete: "cascade" }),
-});
+})
 
 export function fkAccountsUserId() {
-  return users.id;
+  return users.id
 }
 
 export const accounts = pgTable("accounts", {
@@ -108,17 +103,15 @@ export const accounts = pgTable("accounts", {
   scope: text(),
   password: text(),
   createdAt: timestamp().defaultNow().notNull(),
-  updatedAt: timestamp()
-    .$onUpdate(schemaOnUpdateNow)
-    .notNull(),
-});
+  updatedAt: timestamp().$onUpdate(schemaOnUpdateNow).notNull(),
+})
 
 export function fkIssueLikesIssueId() {
-  return issues.id;
+  return issues.id
 }
 
 export function fkIssueLikesUserId() {
-  return users.id;
+  return users.id
 }
 
 export const issueLikes = pgTable("issue_likes", {
@@ -130,7 +123,7 @@ export const issueLikes = pgTable("issue_likes", {
     .notNull()
     .references(fkIssueLikesUserId, { onDelete: "cascade" }),
   createdAt: timestamp().notNull().defaultNow(),
-});
+})
 
 export const verifications = pgTable("verifications", {
   id: uuid().primaryKey().defaultRandom(),
@@ -138,8 +131,5 @@ export const verifications = pgTable("verifications", {
   value: text().notNull(),
   expiresAt: timestamp().notNull(),
   createdAt: timestamp().defaultNow().notNull(),
-  updatedAt: timestamp()
-    .defaultNow()
-    .$onUpdate(schemaOnUpdateNow)
-    .notNull(),
-});
+  updatedAt: timestamp().defaultNow().$onUpdate(schemaOnUpdateNow).notNull(),
+})

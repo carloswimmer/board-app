@@ -31,7 +31,15 @@ describe("requireAuth", () => {
 
   it("returns 401 when session is null", async () => {
     const app = buildApp({
-      user: { id: "u1", name: "A", email: "a@a.com", emailVerified: true, image: null, createdAt: new Date(), updatedAt: new Date() } as AuthSession["user"],
+      user: {
+        id: "u1",
+        name: "A",
+        email: "a@a.com",
+        emailVerified: true,
+        image: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as AuthSession["user"],
       session: null,
     })
     const res = await app.request("http://localhost/x")

@@ -28,9 +28,7 @@ function wrapper({ children }: { children: ReactNode }) {
       },
     ],
   })
-  return (
-    <QueryClientProvider client={client}>{children}</QueryClientProvider>
-  )
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>
 }
 
 describe("useLikeMutation", () => {
@@ -78,7 +76,9 @@ describe("useLikeMutation", () => {
       interactions: [{ issueId: "other", isLiked: false, likesCount: 5 }],
     })
     function W({ children }: { children: ReactNode }) {
-      return <QueryClientProvider client={client}>{children}</QueryClientProvider>
+      return (
+        <QueryClientProvider client={client}>{children}</QueryClientProvider>
+      )
     }
     const { result } = renderHook(() => useLikeMutation(ISSUE_ID_A), {
       wrapper: W,
@@ -98,7 +98,9 @@ describe("useLikeMutation", () => {
     })
     const invalidateSpy = vi.spyOn(client, "invalidateQueries")
     function W({ children }: { children: ReactNode }) {
-      return <QueryClientProvider client={client}>{children}</QueryClientProvider>
+      return (
+        <QueryClientProvider client={client}>{children}</QueryClientProvider>
+      )
     }
 
     const { result } = renderHook(() => useLikeMutation(ISSUE_ID_A), {
@@ -111,9 +113,9 @@ describe("useLikeMutation", () => {
     const filters = invalidateSpy.mock.calls[0]?.[0]
     expect(filters).toBeDefined()
     const predicate = filters?.predicate
-    expect(
-      predicate?.({ queryKey: ["other-key", ISSUE_ID_A] } as never),
-    ).toBe(false)
+    expect(predicate?.({ queryKey: ["other-key", ISSUE_ID_A] } as never)).toBe(
+      false,
+    )
     expect(predicate?.({ queryKey: ["issue-likes", 123] } as never)).toBe(false)
     expect(
       predicate?.({ queryKey: ["issue-likes", ISSUE_ID_A] } as never),

@@ -3,9 +3,7 @@ import { getCookiesFromHeaders } from "./get-cookies-from-headers"
 
 describe("getCookiesFromHeaders", () => {
   it("copies cookie header when present", () => {
-    const h = getCookiesFromHeaders(
-      new Headers({ cookie: "session=abc" }),
-    )
+    const h = getCookiesFromHeaders(new Headers({ cookie: "session=abc" }))
     expect(h.get("cookie")).toBe("session=abc")
     expect(h.get("Content-type")).toBe("application/json")
   })

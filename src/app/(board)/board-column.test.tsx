@@ -6,22 +6,19 @@ import {
 import { render, screen } from "@testing-library/react"
 import type { ReactElement } from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
+import { getIssueInteractions } from "@/http/get-issue-interactions"
 import { ISSUE_ID_A } from "@/test/fixtures"
 import { BoardColumn } from "./board-column"
-import { getIssueInteractions } from "@/http/get-issue-interactions"
 
 vi.mock("@tanstack/react-query", async () => {
-  const actual =
-    await vi.importActual<typeof import("@tanstack/react-query")>(
-      "@tanstack/react-query",
-    )
+  const actual = await vi.importActual<typeof import("@tanstack/react-query")>(
+    "@tanstack/react-query",
+  )
   return {
     ...actual,
     useQuery: vi.fn(() => ({
       data: {
-        interactions: [
-          { issueId: ISSUE_ID_A, isLiked: false, likesCount: 2 },
-        ],
+        interactions: [{ issueId: ISSUE_ID_A, isLiked: false, likesCount: 2 }],
       },
       isLoading: false,
     })),
@@ -43,20 +40,14 @@ describe("BoardColumn", () => {
   beforeEach(() => {
     vi.mocked(useQuery).mockReturnValue({
       data: {
-        interactions: [
-          { issueId: ISSUE_ID_A, isLiked: false, likesCount: 2 },
-        ],
+        interactions: [{ issueId: ISSUE_ID_A, isLiked: false, likesCount: 2 }],
       },
       isLoading: false,
     })
   })
 
   it("shows empty state", () => {
-    render(
-      wrap(
-        <BoardColumn title="Backlog" issues={[]} className="bg-x" />,
-      ),
-    )
+    render(wrap(<BoardColumn title="Backlog" issues={[]} className="bg-x" />))
     expect(
       screen.getByText("No issues found for this section"),
     ).toBeInTheDocument()
@@ -105,7 +96,9 @@ describe("BoardColumn", () => {
     const firstCall = vi.mocked(useQuery).mock.calls[0]?.[0]
     expect(firstCall?.queryKey).toEqual(["issue-likes", ISSUE_ID_A])
     await firstCall?.queryFn()
-    expect(getIssueInteractions).toHaveBeenCalledWith({ issueIds: [ISSUE_ID_A] })
+    expect(getIssueInteractions).toHaveBeenCalledWith({
+      issueIds: [ISSUE_ID_A],
+    })
   })
 
   it("uses empty interactions while query is loading", () => {

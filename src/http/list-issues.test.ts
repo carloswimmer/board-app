@@ -24,9 +24,11 @@ describe("listIssues http", () => {
     }
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue(
-        new Response(JSON.stringify(payload), { status: 200 }),
-      ),
+      vi
+        .fn()
+        .mockResolvedValue(
+          new Response(JSON.stringify(payload), { status: 200 }),
+        ),
     )
 
     const { listIssues } = await import("./list-issues")

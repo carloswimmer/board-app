@@ -1,7 +1,7 @@
 import { OpenAPIHono } from "@hono/zod-openapi"
 import { describe, expect, it, vi } from "vitest"
 import { makeSelectFromRows } from "@/test/drizzle-mocks"
-import { ISSUE_ID_A, createdAt, mockSession, mockUser } from "@/test/fixtures"
+import { createdAt, ISSUE_ID_A, mockSession, mockUser } from "@/test/fixtures"
 import type { AuthSession } from "../auth"
 import { toggleIssueLike } from "./toggle-issue-like"
 
@@ -46,9 +46,12 @@ describe("toggleIssueLike route", () => {
   it("returns 404 when issue missing", async () => {
     vi.mocked(db.select).mockReturnValue(makeSelectFromRows([]))
     const app = mount()
-    const res = await app.request(`http://localhost/issues/${ISSUE_ID_A}/like`, {
-      method: "POST",
-    })
+    const res = await app.request(
+      `http://localhost/issues/${ISSUE_ID_A}/like`,
+      {
+        method: "POST",
+      },
+    )
     expect(res.status).toBe(404)
   })
 
@@ -72,9 +75,12 @@ describe("toggleIssueLike route", () => {
     } as never)
 
     const app = mount()
-    const res = await app.request(`http://localhost/issues/${ISSUE_ID_A}/like`, {
-      method: "POST",
-    })
+    const res = await app.request(
+      `http://localhost/issues/${ISSUE_ID_A}/like`,
+      {
+        method: "POST",
+      },
+    )
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(body.liked).toBe(false)
@@ -96,9 +102,12 @@ describe("toggleIssueLike route", () => {
     } as never)
 
     const app = mount()
-    const res = await app.request(`http://localhost/issues/${ISSUE_ID_A}/like`, {
-      method: "POST",
-    })
+    const res = await app.request(
+      `http://localhost/issues/${ISSUE_ID_A}/like`,
+      {
+        method: "POST",
+      },
+    )
     expect(res.status).toBe(200)
     const body = await res.json()
     expect(body.liked).toBe(true)
