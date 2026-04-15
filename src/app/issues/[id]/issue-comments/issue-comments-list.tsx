@@ -19,7 +19,10 @@ export async function IssueCommentsList({ issueId }: IssueCommentsListProps) {
     <div className="space-y-3">
       {comments.map((comment) => (
         <Comment.Root key={comment.id}>
-          <Comment.Avatar src={comment.author.avatar} />
+          <Comment.Avatar
+            src={comment.author.avatar}
+            alt={comment.author.name}
+          />
 
           <Comment.Content>
             <Comment.Header>
