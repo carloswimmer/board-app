@@ -25,12 +25,10 @@ type InteractionValue = {
 export function BoardColumn({ title, issues, className }: BoardColumnProps) {
   const allIssueIds = issues.map((issue) => issue.id)
 
-  const { data: interactionsData, isLoading: isLoadingInteractions } = useQuery(
-    {
-      queryKey: ["issue-likes", allIssueIds.join()],
-      queryFn: () => getIssueInteractions({ issueIds: allIssueIds }),
-    },
-  )
+  const { data: interactionsData } = useQuery({
+    queryKey: ["issue-likes", allIssueIds.join()],
+    queryFn: () => getIssueInteractions({ issueIds: allIssueIds }),
+  })
 
   const interactions = useMemo(() => {
     if (!interactionsData) {
